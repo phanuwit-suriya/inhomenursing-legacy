@@ -2,12 +2,7 @@ import os
 import time
 import datetime
 import requests
-
-
 from gtts import gTTS
-
-commands = ['backward', 'forward', 'goodafternoon', 'goodevening', 'goormorning',
-            'lastwindow', 'newemail', 'nextwindow', 'openbrowser', 'openmusicplayer']
 
 
 def speak(text):
@@ -15,9 +10,13 @@ def speak(text):
     tts.save(text.replace(" ", "") + ".mp3")
     os.system(text.replace(" ", "") + '.mp3')
     time.sleep(10)
-    os.system("TASKKILL /F /IM wmplayer.exe")
-    time.sleep(1)
+    os.system('TASKKILL /F /IM wmplayer.exe')
+    time.sleep(1/2)
     os.remove(text.replace(" ", "") + ".mp3")
+
+
+def silence():
+    speak('please spaek something after listening')
 
 
 def clocktime():
@@ -40,7 +39,7 @@ def weather():
     temperature = json_object['main']['temp'] - 273.15
     humidity = json_object['main']['humidity']
     speak("The weather in Bangkok" + " right now is " + str(round(temperature, 1)
-                                                            ) + " degree celsius" + "with " + str(humidity) + " percent of himidity")
+                                                            ) + " degree celsius " + "with " + str(humidity) + " percent of himidity")
 
 
 def browser():
@@ -51,18 +50,20 @@ def musicplayer():
     os.system("start spotify")
 
 
-def main(command):
-    if command == "what time is it":
+def main(command=''):
+    print(command)
+    if command == '':
+        silence()
+    if command == 'what time is it':
         clocktime()
-    if command == "what day is today":
+    if command == 'what day is today':
         date()
-    if command == "what's the weather today" or "what is the weather today" or "what's the weather" or "what is the weather":
+    if command == 'what is the weather today':
         weather()
-    if command == "open browser":
+    if command == 'open browser':
         browser()
-    if command == "open music player":
+    if command == 'open music player':
         musicplayer()
 
 
-if __name__ == '__main__':
-    main("what time is it")
+    return True
