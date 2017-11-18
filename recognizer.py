@@ -19,24 +19,24 @@ activate_word = 'listening'
 r = sr.Recognizer()
 
 with sr.Microphone() as source1:
+    print("Speak 'listening' to start")
     while True:
-        time.sleep(1)
-        print("Speak 'listening' to start")
+        time.sleep(1
         print("Speak now")
-        audio1 = r.listen(source1)
-        words = recognizer(audio1)
+        audio1=r.listen(source1)
+        words=recognizer(audio1)
         print("You said: {}".format(words))
         if activate_word in words:
             with sr.Microphone() as source2:
-                finish = False
+                finish=False
                 while not finish:
                     time.sleep(1)
                     print("What can i help you?")
-                    audio2 = r.listen(source2)
-                    command = recognizer(audio2)
+                    audio2=r.listen(source2)
+                    command=recognizer(audio2)
                     print("Your command is: {}".format(command))
                     if not command == '':
-                        finish = commands.main(command)
+                        finish=commands.main(command)
                     else:
                         break
         elif words == "":

@@ -8,6 +8,8 @@ def create_database():
     try:
         cursor.execute('''
             CREATE DATABASE inhomenursing
+                DEFAULT CHARACTER SET utf8
+                DEFAULT COLLATE utf8_general_ci
             ''')
     except mysql.connector.Error as err:
         print("Failed creating database: {}".format(err))
@@ -19,8 +21,8 @@ def create_table():
         cursor.execute('''
             CREATE TABLE foods(
                 foodID int(4) PRIMARY KEY AUTO_INCREMENT,
-                foodThaiName VARCHAR(20),
-                foodThaiScript VARCHAR(30),
+                foodThaiName VARCHAR(30) UNIQUE,
+                foodThaiScript VARCHAR(30) UNIQUE,
                 foodEnglishName VARCHAR(30),
                 foodDescription TEXT)
             ''')
@@ -35,7 +37,7 @@ def create_table():
 
 def insert_table(thai_name, thai_script, english_name, description):
     cursor.execute('''
-        INSERT INTO foods(foodThaiName, foodThaiScript, foodEnglishName, foodDescription)
+        INSERT IGNORE INTO foods(foodThaiName, foodThaiScript, foodEnglishName, foodDescription)
         VALUES(%s, %s, %s, %s)''', (thai_name, thai_script, english_name, description))
     db.commit()
 
@@ -70,7 +72,7 @@ except mysql.connector.Error as err:
 
 create_table()
 
-for numTab in range(0,15):
+for numTab in range(0, 15):
     for row in tables[numTab].rows[:len(tables[numTab].rows)-1]:
         thai_name = str(row['Thai name'])
         thai_script = str(row['Thai script'])
@@ -82,6 +84,6 @@ for numTab in range(0,15):
         description = str(row['Description'])
         insert_table(thai_name, thai_script, english_name, description)
 
-querying_data()
+# querying_data()
 cursor.close()
 db.close()
