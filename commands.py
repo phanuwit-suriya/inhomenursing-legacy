@@ -15,8 +15,8 @@ def speak(text):
     os.remove(text.replace(" ", "") + ".mp3")
 
 
-def silence():
-    speak('please spaek something after listening')
+def finish():
+    speak("you're welcome")
 
 
 def clocktime():
@@ -34,10 +34,10 @@ def date():
 
 def weather():
     r = requests.get(
-        'https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&APPID=52a601a7b6e589c3e9b7d18ee259b1be')
+        "https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&APPID=52a601a7b6e589c3e9b7d18ee259b1be")
     json_object = r.json()
-    temperature = json_object['main']['temp'] - 273.15
-    humidity = json_object['main']['humidity']
+    temperature = json_object["main"]["temp"] - 273.15
+    humidity = json_object["main"]["humidity"]
     speak("The weather in Bangkok" + " right now is " + str(round(temperature, 1)
                                                             ) + " degree celsius " + "with " + str(humidity) + " percent of himidity")
 
@@ -50,20 +50,20 @@ def musicplayer():
     os.system("start spotify")
 
 
-def main(command=''):
+def main(command=""):
     print(command)
-    if command == '':
-        silence()
-    if command == 'what time is it':
+    if any(word in command for word in ["thanks", "thank you"]):
+        finish()
+        return True
+    if command == "what time is it":
         clocktime()
-    if command == 'what day is today':
+    if command == "what day is today":
         date()
-    if command == 'what is the weather today':
+    if all(word in command for word in ["what", "weather"]):
         weather()
-    if command == 'open browser':
+    if command == "open browser":
         browser()
-    if command == 'open music player':
+    if command == "open music player":
         musicplayer()
 
-
-    return True
+    return False
