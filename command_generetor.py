@@ -1,7 +1,7 @@
 from gtts import gTTS
 
-command = 'what day is today'
+command = 'what can i do for you'
 
 tts = gTTS(command)
-tts.save("C:/Users/Effigy/Desktop/speech_recognition/commands/" +
+tts.save("C:/Users/Effigy/Desktop/In-home Nursing/commands/" +
          command.replace(" ", "") + ".mp3")
