@@ -4,14 +4,12 @@ import speech_recognition as sr
 from gtts import gTTS
 
 
-def sound(sound):
-    os.system(sound.replace(" ", "") + ".mp3")
-
 def speaker(text):
-    path = os.path.dirname('C:/Users/Effigy/Desktop/tmp')
+    path = "C:/Users/Effigy/Desktop/tmp/"
     tts = gTTS(text=text)
     tts.save(path + text.replace(" ", "") + ".mp3")
     os.system(path + text.replace(" ", "") + '.mp3')
+
 
 def recognizer():
     r = sr.Recognizer()

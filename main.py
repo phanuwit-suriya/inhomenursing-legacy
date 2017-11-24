@@ -8,11 +8,16 @@ from command import command
 
 
 active_word = 'listening'
+active_cmd = False
 breakfast = False
 lunch = False
 dinner = False
+setAlarm = False
 
-print('Program has started')
+speech.speaker("Program has started")
+time.sleep(2)
+speech.speaker("Speak listening before giving command")
+time.sleep(3)
 while True:
     now = datetime.datetime.now()
     if now.hour == 0:
@@ -21,32 +26,38 @@ while True:
         dinner = False
 
     if not (breakfast or lunch or dinner):
-        if not breakfast and now.hour == 12:
+        if not breakfast and now.hour == 10:
             print('Breakfast')
             food = speech.recognizer()
             breakfast = database.search(food)
             if breakfast:
                 database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
+            else:
+                pass
         elif not lunch and now.hour == 14:
             print('Lunch')
             food = speech.recognizer()
             lunch = database.search(food)
             if lunch:
                 database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
-        elif not dinner and now.hour == 20:
+            else:
+                pass
+        elif not dinner and now.hour == 21:
             print('Dinner')
             food = speech.recognizer()
             dinner = database.search(food)
+            print(dinner)
             if dinner:
                 database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
+            else:
+                pass
 
-    print('Speak "listening" before giving command')
     word = speech.recognizer()
-
     if word == active_word:
-        speech.sound('what can i do for you')
-        while True:
+        active_cmd = True
+        speech.speaker('what can i do for you')
+        while active_cmd:
             cmd = speech.recognizer()
-            command(cmd)
+            active_cmd = command(cmd)
     else:
-        pass
+        print("Speak \"listening\" before giving commands")

@@ -5,7 +5,7 @@ import mysql.connector
 from mysql.connector import errorcode
 from wikitables import import_tables
 
-
+# DATABASE NAME
 DB_NAME = 'inhomenursing'
 
 TABLES = {}
@@ -98,10 +98,11 @@ def query_data():
 def search(food):
     query = ("SELECT thai FROM food WHERE thai = '{}'".format(food))
     cursor.execute(query)
-    if (res for res in cursor if res == food):
-        return True
-    else:
-        return False
+    for res in cursor:
+        if res[0] == food:
+            return True
+        else:
+            return False
 
 db = mysql.connector.connect(**config)
 cursor = db.cursor(buffered=True)

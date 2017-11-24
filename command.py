@@ -2,6 +2,7 @@ import os
 import time
 import datetime
 import requests
+import cv2
 
 import speech
 
@@ -32,16 +33,35 @@ def weather():
         str(round(temperature, 1)), str(humidity)))
 
 
-def command(command=""):
-    print(command)
-    if any(word in command for word in ["thanks", "thank you"]):
+def command(command):
+    if command == None:
+        pass
+    elif any(word in command for word in ["thanks", "thank you"]):
         finish()
-        return True
-    if command == "what time is it":
+        return False
+    elif any(word in command for word in ["good morning", "good afternoon", "good evening"]):
+        pass
+    elif command == "what time is it":
         clocktime()
-    if command == "what day is today":
+    elif command == "what day is today":
         date()
-    if all(word in command for word in ["what", "weather"]):
+    elif all(word in command for word in ["what", "weather"]):
         weather()
+    elif command == "set alarm":
+        pass
 
-    return False
+    return True
+
+'''
+def command(command):
+    if command.split()[0] == 'open':
+        open()
+    elif command.split()[0:2] == ['go', 'to']:
+        goto()
+    elif setlarm:
+        setalarm()
+    elif settimer:
+        settimer()
+    elif
+
+'''
