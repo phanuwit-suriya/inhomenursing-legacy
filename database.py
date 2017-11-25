@@ -9,26 +9,68 @@ from wikitables import import_tables
 DB_NAME = 'inhomenursing'
 
 TABLES = {}
-TABLES['food'] = (
-    "CREATE TABLE food ("
-    "   id int(4) AUTO_INCREMENT,"
-    "   thai VARCHAR(30) UNIQUE,"
-    "   script VARCHAR(30) UNIQUE,"
-    "   english VARCHAR(30),"
-    "   description TEXT,"
-    "   PRIMARY KEY (id)"
-    ") ENGINE=InnoDB")
-
 TABLES['routine'] = (
     "CREATE TABLE routine ("
-    "   time CHAR(20) NOT NULL,"
+    "   time INT NOT NULL,"
     "   food VARCHAR(30),"
     "   PRIMARY KEY (time)"
     ") ENGINE=InnoDB")
 
+TABLES['nutrition'] = (
+    "CREATE TABLE nutrition ("
+    "   `nutrition_id` INT AUTO_INCREMENT,"
+    "   `servingSize` TEXT,"
+    "   `calories(kcal)` FLOAT,"
+    "   `calFat(kcal)` FLOAT,"
+    "   `totalFat(g)` FLOAT,"
+    "   `satFat(g)` FLOAT,"
+    "   `polyunsatFat(g)` FLOAT,"
+    "   `monounsatFat(g)` FLOAT,"
+    "   `transFat(g)` FLOAT,"
+    "   `cholesterol(mg)` FLOAT,"
+    "   `sodium(mg)` FLOAT,"
+    "   `potassium(mg)` FLOAT,"
+    "   `totalCarb(g)` FLOAT,"
+    "   `dietFiber(g)` FLOAT,"
+    "   `sugar(g)` FLOAT,"
+    "   `protein(g)` FLOAT,"
+    "   `totalFat(%)` FLOAT,"
+    "   `satFat(%)` FLOAT,"
+    "   `cholesterol(%)` FLOAT,"
+    "   `sodium(%)` FLOAT,"
+    "   `potassium(%)` FLOAT,"
+    "   `totalCarb(%)` FLOAT,"
+    "   `dietFiber(%)` FLOAT,"
+    "   `protein(%)` FLOAT,"
+    "   `vitA(%)` FLOAT,"
+    "   `vitC(%)` FLOAT,"
+    "   `calcium(%)` FLOAT,"
+    "   `iron(%)` FLOAT,"
+    "   `vitD(%)` FLOAT,"
+    "   `vitB6(%)` FLOAT,"
+    "   `vitB12(%)` FLOAT,"
+    "   `magnesium(%)` FLOAT,"
+    "   `thaimin(%)` FLOAT,"
+    "   `riboflavin(%)` FLOAT,"
+    "   `niacin(%)` FLOAT,"
+    "   `zinc(%)` FLOAT,"
+    "   `phosphorus(%)` FLOAT,"
+    "   `vitK(%)` FLOAT,"
+    "   PRIMARY KEY (nutrition_id)"
+    ") ENGINE=InnoDB")
+
+TABLES['food'] = (
+    "CREATE TABLE food ("
+    "   food_id INT NOT NULL AUTO_INCREMENT,"
+    "   thaiName VARCHAR(30) UNIQUE,"
+    "   thaiScript VARCHAR(30) UNIQUE,"
+    "   englishName VARCHAR(30),"
+    "   description TEXT,"
+    "   PRIMARY KEY (food_id)"
+    ") ENGINE=InnoDB")
+
 FIELDS = {}
 FIELDS['food'] = ('thai', 'script', 'english', 'description')
-
 FIELDS['routine'] = ('datetime', 'food')
 
 config = {
@@ -75,7 +117,7 @@ def create_table(name, ddl):
 
 def insert_food(tname, script, ename, desc):
     cursor.execute('''
-        INSERT IGNORE INTO food(thai, script, english, description)
+        INSERT IGNORE INTO food(thaiName, thaiScript, englishName, description)
         VALUES (%s, %s, %s, %s)''', (tname, script, ename, desc))
     db.commit()
 
@@ -84,6 +126,13 @@ def insert_routine(now, food):
     cursor.execute('''
         INSERT IGNORE INTO routine(time, food)
         VALUES (%s, %s)''', (now, food))
+    db.commit()
+
+
+def insert_nutrition(servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, zinc, phosphorus, vitK):
+    cursor.execute('''
+        INSERT IGNORE INTO nutrition(`servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `zinc(%)`, `phosphorus(%)`, `vitK(%)`)
+        VALUES (%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s)''', (servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, zinc, phosphorus, vitK))
     db.commit()
 
 
@@ -125,16 +174,16 @@ for name, ddl in TABLES.items():
     create_table(name, ddl)
 
 
-tables = import_tables('List of Thai dishes')
+# tables = import_tables('List of Thai dishes')
 
-for numTab in range(0, 15):
-    for row in tables[numTab].rows[:len(tables[numTab].rows)-1]:
-        thai_name = str(row['Thai name'])
-        thai_script = str(row['Thai script'])
-        if 'http' in thai_script:
-            thai_script = thai_script.split()[1].strip(']')
-        english_name = str(row['English name'])
-        if english_name == '<!-- English name -->':
-            english_name = 'None'
-        description = str(row['Description'])
-        insert_food(thai_name, thai_script, english_name, description)
+# for numTab in range(0, 15):
+#     for row in tables[numTab].rows[:len(tables[numTab].rows)-1]:
+#         thai_name = str(row['Thai script'])
+#         if 'http' in thai_name:
+#             thai_name = thai_name.split()[1].strip(']')
+#         thai_script = str(row['Thai name'])
+#         english_name = str(row['English name'])
+#         if english_name == '<!-- English name -->':
+#             english_name = 'None'
+#         description = str(row['Description'])
+#         insert_food(thai_name, thai_script, english_name, description)
