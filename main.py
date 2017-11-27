@@ -62,6 +62,7 @@ while True:
     print("Speak listening before giving commands")
     word = speech.recognizer()
     if word == active_word:
+        active_cmd = True
         count = 3
         print("What can i do for you?")
         # TRY TO CATCH PHRASE UNTIL COUNT IS ZERO
