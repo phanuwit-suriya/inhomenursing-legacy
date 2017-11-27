@@ -146,14 +146,31 @@ def query_data():
         print('Food ID: {} Thai Script: {}'.format(foodid, thai))
 
 
-def search(food):
-    query = ("SELECT thai FROM food WHERE thai = '{}'".format(food))
+def food_search(food):
+    query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
     cursor.execute(query)
     for res in cursor:
         if res[0] == food:
             return True
         else:
             return False
+
+def nutrition_search(food):
+    query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
+    cursor.execute(query)
+    for res in cursor:
+        if food in res[1]:
+            return True
+        else:
+            return False
+
+
+def routine_search(date):
+    # query = "SELECT food FROM routine WHERE time LIKE '{}%'".format(date)
+    query = "SELECT DISTINCT n.* FROM nutrition n JOIN routine r ON n.name LIKE CONCAT('%', r.food, '%') WHERE r.time LIKE '%{}%'".format(date)
+    cursor.execute(query)
+    for res in cursor:
+        print(res)
 
 
 db = mysql.connector.connect(**config)
@@ -172,7 +189,7 @@ except mysql.connector.Error as err:
         print(err)
         exit(1)
 
-CREATE TABLE
+# CREATE TABLE
 for name, ddl in TABLES.items():
     create_table(name, ddl)
 

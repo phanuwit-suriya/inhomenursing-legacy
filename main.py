@@ -4,10 +4,20 @@ import datetime
 
 import database
 import speech
-import command
+from command import command
 
+
+def meal(food):
+    eatFood = database.nutrition_search(food)
+    if eatFood:
+        database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
+        return eatFood
+    else:
+        return eatFood
+
+greeting = ['good morning', 'goor afternoon', 'good evening']
 active_word = 'listening'
-active_cmd = False
+active_cmd = True
 
 breakfast = False
 lunch = False
@@ -15,50 +25,58 @@ dinner = False
 
 setAlarm = False
 
-speech.speaker("Program has started")
-time.sleep(2)
-speech.speaker("Speak listening before giving command")
-time.sleep(3)
+print("Program has started")
+# speech.speaker("Program has started. Speak listening before giving commands")
+# time.sleep(5)
 while True:
     now = datetime.datetime.now()
+    # RESET MEAL EVERY MIDNIGHT
     if now.hour == 0:
         breakfast = False
         lunch = False
         dinner = False
 
+    # CHECK IF EACH MEAL HAS BEEN EATEN
     if not (breakfast or lunch or dinner):
-        if not breakfast and now.hour == 10:
+        if not breakfast and (now.hour == 10) and (now.minute % 15 == 0):
             print('Breakfast')
             food = speech.recognizer()
-            breakfast = database.search(food)
-            if breakfast:
-                database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
-            else:
+            if food == None:
                 pass
-        elif not lunch and now.hour == 14:
+            else:
+                breakfast = meal(food)
+        elif not lunch and (now.hour == 14)and (now.minute % 15 == 0):
             print('Lunch')
             food = speech.recognizer()
-            lunch = database.search(food)
-            if lunch:
-                database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
-            else:
+            if food == None:
                 pass
-        elif not dinner and now.hour == 21:
+            else:
+                lunch = meal(food)
+        elif not dinner and (now.hour == 20):
             print('Dinner')
             food = speech.recognizer()
-            dinner = database.search(food)
-            print(dinner)
-            if dinner:
-                database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
-            else:
+            if food == None:
                 pass
+            else:
+                dinner = meal(food)
 
+    # SPEAK "LISTENING" TO ACTIVATE
+    print("Speak listening before giving commands")
     word = speech.recognizer()
     if word == active_word:
-        active_cmd = True
-        speech.speaker('what can i do for you')
+        count = 3
+        print("What can i do for you?")
+        # TRY TO CATCH PHRASE UNTIL COUNT IS ZERO
+        # IF COUNT IS ZERO, SPEAK "LISTENING" AGAIN
         while active_cmd:
-            cmd = speech.recognizer()
-            active_cmd = command(cmd)
-    else:
-        print("Speak \"listening\" before giving commands")
+            try:
+                cmd = speech.recognizer()
+                if cmd == None:
+                    count -= 1
+                    if count == 0:
+                        active_cmd = False
+                else:
+                    active_cmd = command(cmd.lower())
+                    count = 3
+            except TypeError:
+                pass

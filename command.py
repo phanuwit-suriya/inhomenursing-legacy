@@ -1,28 +1,38 @@
 import os
 import time
+import random
 import datetime
 import requests
 
 import speech
+from database import routine_search
 
 
-def finish():
-    speech.speaker("you're welcome")
+def bye():
+    response = {1: 'You\'re welcome', 2: 'I\'m happy to help', 3: 'It\'s my pleasure',
+                4: 'I\'m glad to help', 5: 'No trouble at all', 6: 'Don\'t mention it'}
+    print(response[random.randint(1, 6)])
+    # speech.speaker("you're welcome")
 
 
-def clocktime():
+def askTime():
     clocktime = datetime.datetime.now().strftime("%H %M %p")
     speech.speaker("the time is {}".format(clocktime))
     print(clocktime)
 
 
-def date():
+def askDate():
     date = datetime.datetime.now().strftime("%A %d %B %Y")
     speech.speaker("today is {}".format(date))
     print(date)
 
 
-def weather():
+def askFood():
+    print("Today's meal")
+    routine_search(time.strftime("%Y%m%d"))
+
+
+def askWeather():
     r = requests.get(
         "https://api.openweathermap.org/data/2.5/weather?q=Bangkok,TH&APPID=52a601a7b6e589c3e9b7d18ee259b1be")
     weather = r.json()
@@ -33,24 +43,27 @@ def weather():
 
 
 def setalarm():
-
     pass
 
 
-def command(command):
-    if command == None:
-        pass
-    elif any(word in command for word in ["thanks", "thank you"]):
-        finish()
+def setTimer():
+    pass
+
+
+def command(command=''):
+    if any(word in command for word in ["thanks", "thank you"]):
+        bye()
         return False
     elif any(word in command for word in ["good morning", "good afternoon", "good evening"]):
         pass
     elif command == "what time is it":
-        clocktime()
+        askTime()
     elif command == "what day is today":
-        date()
-    elif all(word in command for word in ["what", "weather"]):
-        weather()
+        askDate()
+    elif command == 'what did i eat today':
+        askFood()
+    elif all(word in command for word in ["what", "weather"]) or all(word in command for word in["how", "weather"]):
+        askWeather()
     elif command == "set alarm":
         pass
     elif command == "set timer":
