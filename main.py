@@ -4,14 +4,15 @@ import datetime
 
 import database
 import speech
-from command import command
-
+import command
 
 active_word = 'listening'
 active_cmd = False
+
 breakfast = False
 lunch = False
 dinner = False
+
 setAlarm = False
 
 speech.speaker("Program has started")

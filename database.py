@@ -9,6 +9,16 @@ from wikitables import import_tables
 DB_NAME = 'inhomenursing'
 
 TABLES = {}
+TABLES['food'] = (
+    "CREATE TABLE food ("
+    "   food_id INT NOT NULL AUTO_INCREMENT,"
+    "   thaiName VARCHAR(30) UNIQUE,"
+    "   thaiScript VARCHAR(30) UNIQUE,"
+    "   englishName VARCHAR(30),"
+    "   description TEXT,"
+    "   PRIMARY KEY (food_id)"
+    ") ENGINE=InnoDB")
+
 TABLES['routine'] = (
     "CREATE TABLE routine ("
     "   time INT NOT NULL,"
@@ -19,6 +29,7 @@ TABLES['routine'] = (
 TABLES['nutrition'] = (
     "CREATE TABLE nutrition ("
     "   `nutrition_id` INT AUTO_INCREMENT,"
+    "   `name` VARCHAR(100),"
     "   `servingSize` TEXT,"
     "   `calories(kcal)` FLOAT,"
     "   `calFat(kcal)` FLOAT,"
@@ -53,20 +64,11 @@ TABLES['nutrition'] = (
     "   `thaimin(%)` FLOAT,"
     "   `riboflavin(%)` FLOAT,"
     "   `niacin(%)` FLOAT,"
+    "   `vitE(%)` FLOAT,"
+    "   `vitK(%)` FLOAT,"
     "   `zinc(%)` FLOAT,"
     "   `phosphorus(%)` FLOAT,"
-    "   `vitK(%)` FLOAT,"
     "   PRIMARY KEY (nutrition_id)"
-    ") ENGINE=InnoDB")
-
-TABLES['food'] = (
-    "CREATE TABLE food ("
-    "   food_id INT NOT NULL AUTO_INCREMENT,"
-    "   thaiName VARCHAR(30) UNIQUE,"
-    "   thaiScript VARCHAR(30) UNIQUE,"
-    "   englishName VARCHAR(30),"
-    "   description TEXT,"
-    "   PRIMARY KEY (food_id)"
     ") ENGINE=InnoDB")
 
 FIELDS = {}
@@ -129,10 +131,10 @@ def insert_routine(now, food):
     db.commit()
 
 
-def insert_nutrition(servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, zinc, phosphorus, vitK):
+def insert_nutrition(name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus):
     cursor.execute('''
-        INSERT IGNORE INTO nutrition(`servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `zinc(%)`, `phosphorus(%)`, `vitK(%)`)
-        VALUES (%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s)''', (servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, zinc, phosphorus, vitK))
+        INSERT IGNORE INTO nutrition(`name`, `servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vitE(%)`, `vitK(%)`, `zinc(%)`, `phosphorus(%)`)
+        VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus))
     db.commit()
 
 
@@ -153,6 +155,7 @@ def search(food):
         else:
             return False
 
+
 db = mysql.connector.connect(**config)
 cursor = db.cursor(buffered=True)
 
@@ -169,10 +172,9 @@ except mysql.connector.Error as err:
         print(err)
         exit(1)
 
-# CREATE TABLE
+CREATE TABLE
 for name, ddl in TABLES.items():
     create_table(name, ddl)
-
 
 # tables = import_tables('List of Thai dishes')
 

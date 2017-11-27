@@ -2,7 +2,6 @@ import os
 import time
 import datetime
 import requests
-import cv2
 
 import speech
 
@@ -33,6 +32,11 @@ def weather():
         str(round(temperature, 1)), str(humidity)))
 
 
+def setalarm():
+
+    pass
+
+
 def command(command):
     if command == None:
         pass
@@ -48,6 +52,8 @@ def command(command):
     elif all(word in command for word in ["what", "weather"]):
         weather()
     elif command == "set alarm":
+        pass
+    elif command == "set timer":
         pass
 
     return True
