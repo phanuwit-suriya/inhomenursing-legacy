@@ -28,7 +28,7 @@ def askDate():
 
 
 def askFood():
-    print("Today's meal")
+    print("List of today's foods")
     routine_search(time.strftime("%Y%m%d"))
 
 

@@ -8,6 +8,7 @@ from wikitables import import_tables
 # DATABASE NAME
 DB_NAME = 'inhomenursing'
 
+# TABLE INFO
 TABLES = {}
 TABLES['food'] = (
     "CREATE TABLE food ("
@@ -71,10 +72,7 @@ TABLES['nutrition'] = (
     "   PRIMARY KEY (nutrition_id)"
     ") ENGINE=InnoDB")
 
-FIELDS = {}
-FIELDS['food'] = ('thai', 'script', 'english', 'description')
-FIELDS['routine'] = ('datetime', 'food')
-
+# DATABASE CONFIG
 config = {
     'user': 'root',
     'password': 'root',
@@ -118,59 +116,81 @@ def create_table(name, ddl):
 
 
 def insert_food(tname, script, ename, desc):
-    cursor.execute('''
-        INSERT IGNORE INTO food(thaiName, thaiScript, englishName, description)
-        VALUES (%s, %s, %s, %s)''', (tname, script, ename, desc))
-    db.commit()
+    try:
+        cursor.execute('''
+            INSERT IGNORE INTO food(thaiName, thaiScript, englishName, description)
+            VALUES (%s, %s, %s, %s)''', (tname, script, ename, desc))
+        db.commit()
+    except Exception as e:
+        print(e)
 
 
 def insert_routine(now, food):
-    cursor.execute('''
-        INSERT IGNORE INTO routine(time, food)
-        VALUES (%s, %s)''', (now, food))
-    db.commit()
+    try:
+        cursor.execute('''
+            INSERT IGNORE INTO routine(time, food)
+            VALUES (%s, %s)''', (now, food))
+        db.commit()
+    except Exception as e:
+        print(e)
 
 
 def insert_nutrition(name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus):
-    cursor.execute('''
-        INSERT IGNORE INTO nutrition(`name`, `servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vitE(%)`, `vitK(%)`, `zinc(%)`, `phosphorus(%)`)
-        VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus))
-    db.commit()
+    try:
+        cursor.execute('''
+            INSERT IGNORE INTO nutrition(`name`, `servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vitE(%)`, `vitK(%)`, `zinc(%)`, `phosphorus(%)`)
+            VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus))
+        db.commit()
+    except Exception as e:
+        print(e)
 
 
 def query_data():
-    cursor.execute('''
-        SELECT id, thai FROM food
-        ORDER BY id''')
-    for foodid, thai in cursor:
-        print('Food ID: {} Thai Script: {}'.format(foodid, thai))
+    try:
+        cursor.execute('''
+            SELECT id, thai FROM food
+            ORDER BY id''')
+        for foodid, thai in cursor:
+            print('Food ID: {} Thai Script: {}'.format(foodid, thai))
+    except Exception as e:
+        print(e)
 
 
 def food_search(food):
-    query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
-    cursor.execute(query)
-    for res in cursor:
-        if res[0] == food:
-            return True
-        else:
-            return False
+    try:
+        query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
+        cursor.execute(query)
+        for res in cursor:
+            if res[0] == food:
+                return True
+            else:
+                return False
+    except Exception as e:
+        print(e)
+
 
 def nutrition_search(food):
-    query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
-    cursor.execute(query)
-    for res in cursor:
-        if food in res[1]:
-            return True
-        else:
-            return False
+    try:
+        query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
+        cursor.execute(query)
+        for res in cursor:
+            if food in res[1]:
+                return True
+            else:
+                return False
+    except Exception as e:
+        print(e)
 
 
 def routine_search(date):
-    # query = "SELECT food FROM routine WHERE time LIKE '{}%'".format(date)
-    query = "SELECT DISTINCT n.* FROM nutrition n JOIN routine r ON n.name LIKE CONCAT('%', r.food, '%') WHERE r.time LIKE '%{}%'".format(date)
-    cursor.execute(query)
-    for res in cursor:
-        print(res)
+    try:
+        query = "SELECT DISTINCT n.* FROM nutrition n JOIN routine r ON n.name LIKE CONCAT('%', r.food, '%') WHERE r.time LIKE '%{}%'".format(
+            date)
+        cursor.execute(query)
+        for res in cursor:
+            print(res)
+    except Exception as e:
+        print(e)
 
 
 db = mysql.connector.connect(**config)

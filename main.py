@@ -15,19 +15,17 @@ def meal(food):
     else:
         return eatFood
 
-greeting = ['good morning', 'goor afternoon', 'good evening']
 active_word = 'listening'
 active_cmd = True
 
 breakfast = False
 lunch = False
 dinner = False
-
 setAlarm = False
+setTimer = False
 
 print("Program has started")
 # speech.speaker("Program has started. Speak listening before giving commands")
-# time.sleep(5)
 while True:
     now = datetime.datetime.now()
     # RESET MEAL EVERY MIDNIGHT
