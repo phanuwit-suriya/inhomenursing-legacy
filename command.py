@@ -42,7 +42,7 @@ def askWeather():
         str(round(temperature, 1)), str(humidity)))
 
 
-def setalarm():
+def setAlarm():
     pass
 
 
@@ -70,17 +70,3 @@ def command(command=''):
         pass
 
     return True
-
-'''
-def command(command):
-    if command.split()[0] == 'open':
-        open()
-    elif command.split()[0:2] == ['go', 'to']:
-        goto()
-    elif setlarm:
-        setalarm()
-    elif settimer:
-        settimer()
-    elif
-
-'''

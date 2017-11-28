@@ -6,7 +6,6 @@ import database
 import speech
 from command import command
 
-
 def meal(food):
     eatFood = database.nutrition_search(food)
     if eatFood:
@@ -43,14 +42,14 @@ while True:
                 pass
             else:
                 breakfast = meal(food)
-        elif not lunch and (now.hour == 14)and (now.minute % 15 == 0):
+        elif not lunch and (now.hour == 14) and (now.minute % 15 == 0):
             print('Lunch')
             food = speech.recognizer()
             if food == None:
                 pass
             else:
                 lunch = meal(food)
-        elif not dinner and (now.hour == 20):
+        elif not dinner and (now.hour == 20) and (now.minute % 15 == 0):
             print('Dinner')
             food = speech.recognizer()
             if food == None:
@@ -65,7 +64,7 @@ while True:
         active_cmd = True
         count = 3
         print("What can i do for you?")
-        # TRY TO CATCH PHRASE UNTIL COUNT IS ZERO
+        # TRY TO CATCH PHRASE TIL COUNT IS ZERO
         # IF COUNT IS ZERO, SPEAK "LISTENING" AGAIN
         while active_cmd:
             try:

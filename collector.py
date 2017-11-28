@@ -3,7 +3,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-import database
+from database import insert_nutrition
 
 
 def main():
@@ -188,7 +188,7 @@ def main():
                 if phosphorus == '__':
                     phosphorus = '0'
 
-                database.insert_nutrition(name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol,
-                                          percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus)
+                insert_nutrition(name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol,
+                                 percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus)
 
         print('Page {}: Done!'.format(numPage))
