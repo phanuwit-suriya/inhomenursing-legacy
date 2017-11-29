@@ -13,10 +13,10 @@ TABLES = {}
 TABLES['food'] = (
     "CREATE TABLE food ("
     "   food_id INT NOT NULL AUTO_INCREMENT,"
-    "   thaiName VARCHAR(30) UNIQUE,"
-    "   thaiScript VARCHAR(30) UNIQUE,"
-    "   englishName VARCHAR(30),"
-    "   description TEXT,"
+    "   food_thai VARCHAR(30) UNIQUE,"
+    "   food_script VARCHAR(30) UNIQUE,"
+    "   food_english VARCHAR(30),"
+    "   food_description TEXT,"
     "   PRIMARY KEY (food_id)"
     ") ENGINE=InnoDB")
 
@@ -31,42 +31,42 @@ TABLES['nutrition'] = (
     "CREATE TABLE nutrition ("
     "   `nutrition_id` INT AUTO_INCREMENT,"
     "   `name` VARCHAR(100),"
-    "   `servingSize` TEXT,"
+    "   `serving_size` TEXT,"
     "   `calories(kcal)` FLOAT,"
-    "   `calFat(kcal)` FLOAT,"
-    "   `totalFat(g)` FLOAT,"
-    "   `satFat(g)` FLOAT,"
-    "   `polyunsatFat(g)` FLOAT,"
-    "   `monounsatFat(g)` FLOAT,"
-    "   `transFat(g)` FLOAT,"
+    "   `cal_fat(kcal)` FLOAT,"
+    "   `total_fat(g)` FLOAT,"
+    "   `sat_fat(g)` FLOAT,"
+    "   `polyunsat_fat(g)` FLOAT,"
+    "   `monounsat_fat(g)` FLOAT,"
+    "   `trans_fat(g)` FLOAT,"
     "   `cholesterol(mg)` FLOAT,"
     "   `sodium(mg)` FLOAT,"
     "   `potassium(mg)` FLOAT,"
-    "   `totalCarb(g)` FLOAT,"
-    "   `dietFiber(g)` FLOAT,"
+    "   `total_carb(g)` FLOAT,"
+    "   `diet_fiber(g)` FLOAT,"
     "   `sugar(g)` FLOAT,"
     "   `protein(g)` FLOAT,"
-    "   `totalFat(%)` FLOAT,"
-    "   `satFat(%)` FLOAT,"
+    "   `total_fat(%)` FLOAT,"
+    "   `sat_fat(%)` FLOAT,"
     "   `cholesterol(%)` FLOAT,"
     "   `sodium(%)` FLOAT,"
     "   `potassium(%)` FLOAT,"
-    "   `totalCarb(%)` FLOAT,"
-    "   `dietFiber(%)` FLOAT,"
+    "   `total_carb(%)` FLOAT,"
+    "   `diet_fiber(%)` FLOAT,"
     "   `protein(%)` FLOAT,"
-    "   `vitA(%)` FLOAT,"
-    "   `vitC(%)` FLOAT,"
+    "   `vit_a(%)` FLOAT,"
+    "   `vit_c(%)` FLOAT,"
     "   `calcium(%)` FLOAT,"
     "   `iron(%)` FLOAT,"
-    "   `vitD(%)` FLOAT,"
-    "   `vitB6(%)` FLOAT,"
-    "   `vitB12(%)` FLOAT,"
+    "   `vit_d(%)` FLOAT,"
+    "   `vit_b6(%)` FLOAT,"
+    "   `vit_b12(%)` FLOAT,"
     "   `magnesium(%)` FLOAT,"
     "   `thaimin(%)` FLOAT,"
     "   `riboflavin(%)` FLOAT,"
     "   `niacin(%)` FLOAT,"
-    "   `vitE(%)` FLOAT,"
-    "   `vitK(%)` FLOAT,"
+    "   `vit_e(%)` FLOAT,"
+    "   `vit_k(%)` FLOAT,"
     "   `zinc(%)` FLOAT,"
     "   `phosphorus(%)` FLOAT,"
     "   PRIMARY KEY (nutrition_id)"
@@ -94,31 +94,21 @@ def create_database():
 
 def create_table(name, ddl):
     try:
-        print("Creating table {}: ".format(name))
+        print('Creating table {}: '.format(name))
         cursor.execute(ddl)
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-            print("already exists.")
+            print('already exists.')
         else:
             print(err.msg)
     else:
         print("OK")
 
-# def insert_into(table_name, fields, values):
-#     insert = ("INSET INTO {} ({}) VALUES ({})".format(
-#         table_name, ', '.join(fields), ', '.join(values)))
-#     cursor.execute(insert)
-#     cursor.execute('''
-#         INSERT INTO %s (%s, %s, %s, %s)
-#         VALUES (%s, %s, %s, %s)
-#         ''', table_name, *fields, tname, script, ename, desc)
-#     db.commit()
-
 
 def insert_food(tname, script, ename, desc):
     try:
         cursor.execute('''
-            INSERT IGNORE INTO food(thaiName, thaiScript, englishName, description)
+            INSERT IGNORE INTO food(food_thai, food_script, food_english, food_description)
             VALUES (%s, %s, %s, %s)''', (tname, script, ename, desc))
         db.commit()
     except Exception as e:
@@ -135,30 +125,19 @@ def insert_routine(now, food):
         print(e)
 
 
-def insert_nutrition(name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus):
+def insert_nutrition(name, serving_size, calories, cal_fat, total_fat, sat_fat, poly_fat, mono_fat, trans_fat, cholesterol, sodium, potassium, total_carb, diet_fiber, sugar, protein, percent_total_fat, percent_sat_fat, percent_cholesterol, percent_sodium, percent_potassium, percent_total_carb, percent_diet_fiber, percent_protein, vit_a, vit_c, calcium, iron, vit_d, vit_b6, vit_b12, magnesium, thiamin, riboflavin, niacin, vit_e, vit_k, zinc, phosphorus):
     try:
         cursor.execute('''
-            INSERT IGNORE INTO nutrition(`name`, `servingSize`, `calories(kcal)`, `calFat(kcal)`, `totalFat(g)`, `satFat(g)`, `polyunsatFat(g)`, `monounsatFat(g)`, `transFat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `totalCarb(g)`, `dietFiber(g)`, `sugar(g)`, `protein(g)`, `totalFat(%)`, `satFat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `totalCarb(%)`, `dietFiber(%)`, `protein(%)`, `vitA(%)`, `vitC(%)`, `calcium(%)`, `iron(%)`, `vitD(%)`, `vitB6(%)`, `vitB12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vitE(%)`, `vitK(%)`, `zinc(%)`, `phosphorus(%)`)
-            VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, servingSize, calories, calFat, totalFat, satFat, polyFat, monoFat, transFat, cholesterol, sodium, potassium, totalCarb, dietFiber, sugar, protein, percent_totalFat, percent_satFat, percent_cholesterol, percent_sodium, percent_potassium, percent_totalCarb, percent_dietFiber, percent_protein, vitA, vitC, calcium, iron, vitD, vitB6, vitB12, magnesium, thiamin, riboflavin, niacin, vitE, vitK, zinc, phosphorus))
+            INSERT IGNORE INTO nutrition(`name`, `serving_size`, `calories(kcal)`, `cal_fat(kcal)`, `total_fat(g)`, `sat_fat(g)`, `polyunsat_fat(g)`, `monounsat_fat(g)`, `trans_fat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `total_carb(g)`, `diet_fiber(g)`, `sugar(g)`, `protein(g)`, `total_fat(%)`, `sat_fat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `total_carb(%)`, `diet_fiber(%)`, `protein(%)`, `vit_a(%)`, `vit_c(%)`, `calcium(%)`, `iron(%)`, `vit_d(%)`, `vit_b6(%)`, `vit_b12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vit_e(%)`, `vit_k(%)`, `zinc(%)`, `phosphorus(%)`)
+            VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, serving_size, calories, cal_fat, total_fat, sat_fat, poly_fat, mono_fat, trans_fat, cholesterol, sodium, potassium, total_carb, diet_fiber, sugar, protein, percent_total_fat, percent_sat_fat, percent_cholesterol, percent_sodium, percent_potassium, percent_total_carb, percent_diet_fiber, percent_protein, vit_a, vit_c, calcium, iron, vit_d, vit_b6, vit_b12, magnesium, thiamin, riboflavin, niacin, vit_e, vit_k, zinc, phosphorus))
         db.commit()
     except Exception as e:
         print(e)
 
 
-def query_data():
-    try:
-        cursor.execute('''
-            SELECT id, thai FROM food
-            ORDER BY id''')
-        for foodid, thai in cursor:
-            print('Food ID: {} Thai Script: {}'.format(foodid, thai))
-    except Exception as e:
-        print(e)
-
-
 def food_search(food):
+    query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
     try:
-        query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
         cursor.execute(query)
         for res in cursor:
             if res[0] == food:
@@ -170,8 +149,8 @@ def food_search(food):
 
 
 def nutrition_search(food):
+    query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
     try:
-        query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
         cursor.execute(query)
         for res in cursor:
             if food in res[1]:
@@ -183,12 +162,13 @@ def nutrition_search(food):
 
 
 def routine_search(date):
+    query = "SELECT DISTINCT r.time, f.food_thai, f.food_script, f.food_english, f.food_description FROM food f JOIN routine r ON f.food_thai LIKE CONCAT(r.food) WHERE r.time LIKE '{}%' ORDER BY r.time".format(
+        date)
     try:
-        query = "SELECT DISTINCT n.* FROM nutrition n JOIN routine r ON n.name LIKE CONCAT('%', r.food, '%') WHERE r.time LIKE '%{}%'".format(
-            date)
         cursor.execute(query)
         for res in cursor:
-            print(res)
+            print('Time: {}\nFood: {}({}, {})\nfood_description: {}'.format(
+                res[0], res[3], res[1], res[2], res[4]))
     except Exception as e:
         print(e)
 
@@ -201,7 +181,7 @@ try:
     db.database = DB_NAME
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-        print("Something is wrong with your user name or password")
+        print('Something is wrong with your user name or password')
     elif err.errno == errorcode.ER_BAD_DB_ERROR:
         create_database()
         db.database = DB_NAME
@@ -210,8 +190,8 @@ except mysql.connector.Error as err:
         exit(1)
 
 # CREATE TABLE
-for name, ddl in TABLES.items():
-    create_table(name, ddl)
+# for name, ddl in TABLES.items():
+#     create_table(name, ddl)
 
 # tables = import_tables('List of Thai dishes')
 
@@ -224,5 +204,5 @@ for name, ddl in TABLES.items():
 #         english_name = str(row['English name'])
 #         if english_name == '<!-- English name -->':
 #             english_name = 'None'
-#         description = str(row['Description'])
-#         insert_food(thai_name, thai_script, english_name, description)
+#         food_description = str(row['food_description'])
+#         insert_food(thai_name, thai_script, english_name, food_description)

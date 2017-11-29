@@ -6,13 +6,14 @@ import database
 import speech
 from command import command
 
+
 def meal(food):
-    eatFood = database.nutrition_search(food)
-    if eatFood:
+    eat_food = database.nutrition_search(food)
+    if eat_food:
         database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
-        return eatFood
+        return eat_food
     else:
-        return eatFood
+        return eat_food
 
 active_word = 'listening'
 active_cmd = True
