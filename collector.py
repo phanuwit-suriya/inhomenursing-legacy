@@ -8,14 +8,14 @@ from database import insert_nutrition
 
 def main():
     for num_page in range(1, 181):
-        page_url = "http://www.calforlife.com/th/calories/food/page{}/".format(
+        page_url = 'http://www.calforlife.com/th/calories/food/page{}'.format(
             num_page)
         page_response = requests.get(page_url)
         page_soup = BeautifulSoup(page_response.text, 'html.parser')
         links = page_soup.find_all('a', href=True)
         for num_link in range(30, 80):
             link = links[num_link]['href']
-            if not "http://www.calfirlife.com/th/calories/food/page" in link:
+            if not 'http://www.calfirlife.com/th/calories/food/page' in link:
                 url = link
                 response = requests.get(url)
                 html_soup = BeautifulSoup(response.text, 'html.parser')

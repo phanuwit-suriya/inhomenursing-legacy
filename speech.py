@@ -3,7 +3,7 @@ import time
 import speech_recognition as sr
 from gtts import gTTS
 
-tmp = "C:/Users/Effigy/Desktop/in-home-nursing/tmp"
+tmp = "C:/Users/Effigy/Desktop/tmp"
 path = "C:/Users/Effigy/Desktop/"
 
 

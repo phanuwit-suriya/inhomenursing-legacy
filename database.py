@@ -189,7 +189,7 @@ except mysql.connector.Error as err:
         print(err)
         exit(1)
 
-# CREATE TABLE
+# CREATE TABLE, FIRST TIME USING ONLY
 # for name, ddl in TABLES.items():
 #     create_table(name, ddl)
 
@@ -202,7 +202,7 @@ except mysql.connector.Error as err:
 #             thai_name = thai_name.split()[1].strip(']')
 #         thai_script = str(row['Thai name'])
 #         english_name = str(row['English name'])
-#         if english_name == '<!-- English name -->':
-#             english_name = 'None'
-#         food_description = str(row['food_description'])
+#         if english_name == '<!-- English name -->' or english_name == '':
+#             english_name = None
+#         food_description = str(row['Description'])
 #         insert_food(thai_name, thai_script, english_name, food_description)

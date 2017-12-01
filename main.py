@@ -1,4 +1,3 @@
-import os
 import time
 import datetime
 
@@ -10,7 +9,7 @@ from command import command
 def meal(food):
     eat_food = database.nutrition_search(food)
     if eat_food:
-        database.insert_routine(time.strftime("%Y%m%d%H%M%S"), food)
+        database.insert_routine(time.strftime('%Y%m%d%H%M%S'), food)
         return eat_food
     else:
         return eat_food
@@ -21,11 +20,9 @@ active_cmd = True
 breakfast = False
 lunch = False
 dinner = False
-setAlarm = False
-setTimer = False
 
-print("Program has started")
-# speech.speaker("Program has started. Speak listening before giving commands")
+print('Program has started')
+# speech.speaker('Program has started. Speak listening before giving commands')
 while True:
     now = datetime.datetime.now()
     # RESET MEAL EVERY MIDNIGHT
@@ -58,15 +55,15 @@ while True:
             else:
                 dinner = meal(food)
 
-    # SPEAK "LISTENING" TO ACTIVATE
-    print("Speak listening before giving commands")
+    # SPEAK 'LISTENING' TO ACTIVATE
+    print('Speak listening before giving commands')
     word = speech.recognizer()
     if word == active_word:
         active_cmd = True
         count = 3
-        print("What can i do for you?")
+        print('What can i do for you?')
         # TRY TO CATCH PHRASE TIL COUNT IS ZERO
-        # IF COUNT IS ZERO, SPEAK "LISTENING" AGAIN
+        # IF COUNT IS ZERO, SPEAK 'LISTENING' AGAIN
         while active_cmd:
             try:
                 cmd = speech.recognizer()
