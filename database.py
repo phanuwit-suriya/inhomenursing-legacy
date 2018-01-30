@@ -82,11 +82,9 @@ config = {
 
 def create_database():
     try:
-        cursor.execute('''
-            CREATE DATABASE {}
-                DEFAULT CHARACTER SET utf8
-                DEFAULT COLLATE utf8_general_ci
-            '''.format(DB_NAME))
+        sql = '''CREATE DATABASE {} DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'''.format(
+            DB_NAME)
+        cursor.execute(sql)
     except mysql.connector.Error as err:
         print("Failed creating database: {}".format(err))
         exit(1)
@@ -127,6 +125,7 @@ def insert_routine(now, food):
 
 def insert_nutrition(name, serving_size, calories, cal_fat, total_fat, sat_fat, poly_fat, mono_fat, trans_fat, cholesterol, sodium, potassium, total_carb, diet_fiber, sugar, protein, percent_total_fat, percent_sat_fat, percent_cholesterol, percent_sodium, percent_potassium, percent_total_carb, percent_diet_fiber, percent_protein, vit_a, vit_c, calcium, iron, vit_d, vit_b6, vit_b12, magnesium, thiamin, riboflavin, niacin, vit_e, vit_k, zinc, phosphorus):
     try:
+        sql = ''''''
         cursor.execute('''
             INSERT IGNORE INTO nutrition(`name`, `serving_size`, `calories(kcal)`, `cal_fat(kcal)`, `total_fat(g)`, `sat_fat(g)`, `polyunsat_fat(g)`, `monounsat_fat(g)`, `trans_fat(g)`, `cholesterol(mg)`, `sodium(mg)`, `potassium(mg)`, `total_carb(g)`, `diet_fiber(g)`, `sugar(g)`, `protein(g)`, `total_fat(%)`, `sat_fat(%)`, `cholesterol(%)`, `sodium(%)`, `potassium(%)`, `total_carb(%)`, `diet_fiber(%)`, `protein(%)`, `vit_a(%)`, `vit_c(%)`, `calcium(%)`, `iron(%)`, `vit_d(%)`, `vit_b6(%)`, `vit_b12(%)`, `magnesium(%)`, `thaimin(%)`, `riboflavin(%)`, `niacin(%)`, `vit_e(%)`, `vit_k(%)`, `zinc(%)`, `phosphorus(%)`)
             VALUES (%s, %s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s ,%s, %s)''', (name, serving_size, calories, cal_fat, total_fat, sat_fat, poly_fat, mono_fat, trans_fat, cholesterol, sodium, potassium, total_carb, diet_fiber, sugar, protein, percent_total_fat, percent_sat_fat, percent_cholesterol, percent_sodium, percent_potassium, percent_total_carb, percent_diet_fiber, percent_protein, vit_a, vit_c, calcium, iron, vit_d, vit_b6, vit_b12, magnesium, thiamin, riboflavin, niacin, vit_e, vit_k, zinc, phosphorus))
@@ -136,8 +135,8 @@ def insert_nutrition(name, serving_size, calories, cal_fat, total_fat, sat_fat, 
 
 
 def food_search(food):
-    query = "SELECT thai FROM food WHERE thai = '{}'".format(food)
     try:
+        sql = "SELECT thai FROM food WHERE thai = '{}'".format(food)
         cursor.execute(query)
         for res in cursor:
             if res[0] == food:
@@ -149,8 +148,8 @@ def food_search(food):
 
 
 def nutrition_search(food):
-    query = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
     try:
+        sql = "SELECT * FROM nutrition WHERE name LIKE '%{}%'".format(food)
         cursor.execute(query)
         for res in cursor:
             if food in res[1]:
@@ -162,9 +161,9 @@ def nutrition_search(food):
 
 
 def routine_search(date):
-    query = "SELECT DISTINCT r.time, f.food_thai, f.food_script, f.food_english, f.food_description FROM food f JOIN routine r ON f.food_thai LIKE CONCAT(r.food) WHERE r.time LIKE '{}%' ORDER BY r.time".format(
-        date)
     try:
+        sql = "SELECT DISTINCT r.time, f.food_thai, f.food_script, f.food_english, f.food_description FROM food f JOIN routine r ON f.food_thai LIKE CONCAT(r.food) WHERE r.time LIKE '{}%' ORDER BY r.time".format(
+            date)
         cursor.execute(query)
         for res in cursor:
             print('Time: {}\nFood: {}({}, {})\nfood_description: {}'.format(
