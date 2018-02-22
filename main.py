@@ -3,13 +3,13 @@ import datetime
 
 import speech
 import database
-import instructions
+from instructions import instructions
 
 
 def meal(food):
     eat_food = database.nutrition_search(food)
     if eat_food:
-        database.insert_routine(time.strftime('%Y%m%d%H%M%S', food))
+        database.insert_routine(time.strftime('%Y%m%d%H%M%S'), food)
         return eat_food
     else:
         return eat_food
@@ -76,7 +76,7 @@ if __name__ == "__main__":
                         if count == 0:
                             active = False
                     else:
-                        active = command(cmd.lower())
+                        active = instructions(word.lower())
                         count = 3
                 except TypeError:
                     pass

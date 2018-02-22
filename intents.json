@@ -1,0 +1,43 @@
+{"intents":
+    [
+        {
+            "tag": "greeting",
+            "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day"],
+            "responses": ["Hello, thank for asking", "Good to see you again", "Hi there, how can I help?"],
+            "context_set": ""
+        },
+        {
+            "tag": "goodbybe",
+            "patterns": ["Bye", "See you later", "Goodbye"],
+            "responses": ["See you!", "Have a nice day", "Bye! Come back again soon."]
+        },
+        {
+            "tag": "paymentregistration",
+            "patterns": ["How to register payment?", "What I need to create payment?", "How to enter nnew payment?"],
+            "responses": ["To create new payment, go to Payment Maintenance module", "Payment must be managed in Payment Maintenance module"]
+        },
+        {
+            "tag": "paymentvalidate",
+            "patterns": ["Please help to validate payment?", "Is payment valid?", "What needs to be done for invoice payment validation?"],
+            "responses": ["Call finance support desk XXXXXXXXXXX", "Please speak to assistant by calling XXXXXXXXXXX"]
+        },
+        {
+            "tag": "startpayment",
+            "patterns": ["How to pay invoice?", "I woould to submit invoice for payment", "How it works to pay"],
+            "responses": ["Do you want to issue payment or check instructions?"],
+            "context_set": "transaction"
+        },
+        {
+            "tag": "payment",
+            "patterns": "payment",
+            "responses": ["To execute payment use code XX-XXXXX-XXXX", "Payment can be done with code XX-XXXXX-XXXX"],
+            "context_set": "transaction"
+        },
+        {
+            "tag": "instructions",
+            "patterns": ["instructions"],
+            "responses": ["To get help about payment call XXXXXXXXXXX", "Get instructions by calling XXXXXXXXXXX"],
+            "context_set": "transaction"
+        }
+    ]
+}

@@ -29,7 +29,7 @@ class Medicine:
                 if self.med:
                     self.show()
                 print(f"Drug name   : {drug}")
-                input_freq = set(input("Frequency   : ").lower())
+                input_freq = set(input("Frequency   : M for Morning, N for Noon, E for Evening, and B for Before bedtime").lower())
                 if all(c in r"mneb" for c in input_freq):
                     input_freq = sorted(input_freq, key=lambda word: [
                                         f.index(w) for w in word])

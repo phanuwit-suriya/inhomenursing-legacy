@@ -48,7 +48,7 @@ def ask_weather():
         str(round(temperature, 1)), str(humidity)))
 
 
-def command(command=""):
+def instructions(command=""):
     if any(word in command for word in ["thanks", "thank you"]):
         bye()
         return False
